@@ -1,7 +1,13 @@
 function filterSemestersAccordingToProgram() {
   const programSelect = document.getElementById("program");
   const semesterSelect = document.getElementById("semester");
+  const sectionSelect = document.getElementById("section");
+  const subjectSelect = document.getElementById("subject");
   const selectedProgram = programSelect.value;
+
+  semesterSelect.innerHTML = '<option value="">Select semester</option>';
+  sectionSelect.innerHTML = '<option value="">Select section</option>';
+  subjectSelect.innerHTML = '<option value="">Select subject</option>';
 
   if (selectedProgram) {
     const semesters = classes
@@ -28,8 +34,12 @@ function filterSectionsAccordingToSemester() {
   const programSelect = document.getElementById("program");
   const semesterSelect = document.getElementById("semester");
   const sectionSelect = document.getElementById("section");
+  const subjectSelect = document.getElementById("subject");
   const selectedProgram = programSelect.value;
   const selectedSemester = parseInt(semesterSelect.value, 10);
+
+  sectionSelect.innerHTML = '<option value="">Select section</option>';
+  subjectSelect.innerHTML = '<option value="">Select subject</option>';
 
   if (selectedProgram && !isNaN(selectedSemester)) {
     const sections = classes
@@ -61,6 +71,8 @@ function filterSubjectsAccordingToSection() {
   const selectedProgram = programSelect.value;
   const selectedSemester = parseInt(semesterSelect.value, 10);
   const selectedSection = sectionSelect.value;
+
+  subjectSelect.innerHTML = '<option value="">Select subject</option>';
 
   if (selectedProgram && !isNaN(selectedSemester) && selectedSection) {
     const subjects = classes

@@ -3,37 +3,36 @@ require_once '../../../src/globalHeader.php';
 authorize('teacher');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    require_once '../../../src/databaseManager.php';
-    $conn = establishConnectionToDB();
-    
-    if(!$conn) {
-        die('Connection to database failed!');
-    }
-    else {
-      $program = $_POST['program'];
-      $semester = $_POST['semester'];
-      $section = $_POST['section'];
-      $subject_code = $_POST['subject'];
-      $created_on = $_POST['date'];
+  require_once '../../../src/databaseManager.php';
+  $conn = establishConnectionToDB();
+  
+  if(!$conn) {
+      die('Connection to database failed!');
+  }
 
-      $pst = $conn->prepare("SELECT `roll_no`, `student_name`, `status` FROM `attendance` WHERE `program` = ? AND `semester` = ? AND `section` = ? AND `subject_code` = ? AND `created_on` = ?");
-      $pst->bind_param("ssiss", $program, $semester, $section, $subject_code, $created_on);
-      $pst->execute();
-      $result = $pst->get_result();
+  $program = $_POST['program'];
+  $semester = $_POST['semester'];
+  $section = $_POST['section'];
+  $subject_code = $_POST['subject'];
+  $created_on = $_POST['date'];
 
-      $contentsOfTbody = '';
-      while ($row = $result->fetch_assoc()) {
-        $contentsOfTbody .= '<tr>';
-        $contentsOfTbody .= '<td>'.$row['roll_no'].'</td>';
-        $contentsOfTbody .= '<td>'.$row['student_name'].'</td>';
-        $contentsOfTbody .= '<td>'.$row['status'].'</td>';
-        $contentsOfTbody .= '</tr>';
-      }
-      $pst->close();
-    }
+  $pst = $conn->prepare("SELECT `roll_no`, `student_name`, `status` FROM `attendance` WHERE `program` = ? AND `semester` = ? AND `section` = ? AND `subject_code` = ? AND `created_on` = ?");
+  $pst->bind_param("ssiss", $program, $semester, $section, $subject_code, $created_on);
+  $pst->execute();
+  $result = $pst->get_result();
 
-    $subject = strtoupper($subject_code);
-    $template = <<<EOT
+  $contentsOfTbody = '';
+  while ($row = $result->fetch_assoc()) {
+    $contentsOfTbody .= '<tr>';
+    $contentsOfTbody .= '<td>'.$row['roll_no'].'</td>';
+    $contentsOfTbody .= '<td>'.$row['student_name'].'</td>';
+    $contentsOfTbody .= '<td>'.$row['status'].'</td>';
+    $contentsOfTbody .= '</tr>';
+  }
+  $pst->close();
+
+  $printed_by = $_SESSION['user_name'];
+  echo <<<EOT
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -43,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <title>Attendance Report</title>
         <style>
           main {
-            padding: 2rem;
+            padding: 0.5rem 0.5rem;
             width: 7in;
             position: absolute;
             left: 50%;
@@ -66,10 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin: 0;
           }
           #dateDiv {
-            font-size: 1.2rem;
-            text-align: right;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            justify-content: center;
           }
           #attendanceInfo {
             margin: 0.5rem 0 1rem 0;
@@ -79,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           h3 {
             display: inline;
           }
-          .leftH3 {
+          .leftAlign {
             text-align: right;
           }
           table,
@@ -93,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           }
           thead {
             text-align: left;
+            background-color: lightgrey;
           }
           th {
             padding: 0.2rem 1rem;
@@ -117,7 +116,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div>Bhadrapur, Jhapa</div>
               </div>
             </div>
-            <div id="dateDiv">$created_on</div>
+            <div id="dateDiv">
+              <div class="leftAlign">attendance of $created_on</div>
+              <div class="leftAlign">printed by "$printed_by"</div>
+            </div>
           </header>
           <div id="attendanceInfo">
             <div>
@@ -127,15 +129,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               </div>
               <div>
                 <h3>Subject Code:</h3>
-                <span>$subject</span>
+                <span>$subject_code</span>
               </div>
             </div>
             <div>
-              <div class="leftH3">
+              <div class="leftAlign">
                 <h3>Semester:</h3>
                 <span>$semester</span>
               </div>
-              <div class="leftH3">
+              <div class="leftAlign">
                 <h3>Section:</h3>
                 <span>$section</span>
               </div>
@@ -158,9 +160,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </body>
 </html>
 EOT;
-    echo $template;
-    $conn->close();
-    exit();
+
+  $conn->close();
+  exit();
 }
 
 require_once '../../../src/selectDataGenerator.php';
@@ -176,7 +178,7 @@ if (empty($_SESSION['csrf_token'])) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>New Attendance | Mechi Multiple Campus</title>
+    <title>Print Attendance | Mechi Multiple Campus</title>
     <link rel="stylesheet" href="../../../res/css/theme.css" />
     <link rel="stylesheet" href="../../../res/css/attendance.css" />
     <link rel="icon" type="image/x-icon" href="../../../res/img/favicon.png" />

@@ -120,7 +120,7 @@ if (empty($_SESSION['csrf_token'])) {
         </div>
 
         <div class="selector">
-          <button type="button" onclick="loadStudents()" id="loader">
+          <button type="button" onclick="checkIfAlreadyDone()" id="loader">
             &emsp;Load&emsp;
           </button>
         </div>

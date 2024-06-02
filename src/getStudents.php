@@ -12,9 +12,9 @@ if ($conn->connect_error) {
 
 $stmt = $conn->prepare("SELECT `roll_no`, `student_name` FROM `students` WHERE `program` = ? AND `semester` = ? AND `section` = ?;");
 
-$program = $_GET['program'];
-$semester = $_GET['semester'];
-$section = $_GET['section'];
+$program = $_POST['program'];
+$semester = $_POST['semester'];
+$section = $_POST['section'];
 $stmt->bind_param("sis", $program, $semester, $section);
 
 $stmt->execute();
