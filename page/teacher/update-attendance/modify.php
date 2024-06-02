@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        header('Location: ../../status.html');
+        header('Location: ../../done.html');
         $conn->close();
         exit();
     }

@@ -5,36 +5,42 @@ function getFormattedDate() {
 }
 
 function loadAttendance() {
-  var xhr = new XMLHttpRequest();
+  const url = window.location.origin + "/api/getAttendance.php";
+  const headers = {
+    "Content-Type": "application/x-www-form-urlencoded",
+  };
 
-  xhr.open("POST", window.location.origin + "/api/getAttendance.php", true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  const params = new URLSearchParams({
+    program: document.getElementById("program").value,
+    semester: document.getElementById("semester").value,
+    section: document.getElementById("section").value,
+    subject_code: document.getElementById("subject").value,
+    date: getFormattedDate(),
+  });
 
-  var params =
-    "program=" +
-    encodeURIComponent(document.getElementById("program").value) +
-    "&semester=" +
-    encodeURIComponent(document.getElementById("semester").value) +
-    "&section=" +
-    encodeURIComponent(document.getElementById("section").value) +
-    "&subject_code=" +
-    encodeURIComponent(document.getElementById("subject").value) +
-    "&date=" +
-    encodeURIComponent(getFormattedDate());
-
-  xhr.send(params);
-
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
+  fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: params.toString(),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.text();
+    })
+    .then((data) => {
       document.getElementsByTagName("section")[0].style.display = "none";
       document.getElementsByTagName("main")[0].style.paddingTop = "2rem";
 
-      generateTable(xhr.responseText);
+      generateTable(data);
       generateHiddenForm();
 
       document.getElementById("form").style.display = "block";
-    }
-  };
+    })
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
+    });
 }
 
 function generateTable(studentRecord) {
