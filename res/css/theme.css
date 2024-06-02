@@ -23,7 +23,43 @@ body {
 }
 
 header {
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   box-shadow: var(--header-shadow);
+  background-color: var(--main-color);
+}
+
+#branding {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+}
+#branding:focus > h2,
+#branding:hover > h2 {
+  color: var(--auxillary-color);
+  transition: var(--transition-time);
+}
+
+#branding > img {
+  margin-right: 2ch;
+  height: calc(var(--h2-size) * 2 + 1rem);
+  width: auto;
+}
+
+#branding > h2 {
+  display: inline;
+  color: var(--accent-color);
+}
+
+button {
+  border: 0;
+  border-radius: 0.2rem;
+  padding: 0.4rem;
+  cursor: pointer;
+  width: max-content;
+  color: var(--main-color);
 }
 
 h1 {

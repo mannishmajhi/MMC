@@ -16,11 +16,11 @@ authorize('teacher');
   </head>
   <body>
     <header>
-      <span id="logo">
+      <span id="branding">
         <img src="../res/img/TU-Logo.svg.png" alt="TU Logo" />
         <h2>Mechi Multiple Campus</h2>
       </span>
-      <button type="button" id="logout" onclick="logout()">Log out</button>
+      <button type="button" id="logout" onclick="window.location.href = window.location.origin + '/src/logout.php';">Log out</button>
     </header>
     <main>
       <div id="title">Please select an option</div>

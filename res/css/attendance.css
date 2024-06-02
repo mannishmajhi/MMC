@@ -1,16 +1,3 @@
-header {
-  padding: 0.5rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--main-color);
-}
-
-#logo {
-  display: flex;
-  align-items: center;
-}
-
 img {
   margin-right: 2ch;
   height: calc(var(--h2-size) * 2 + 1rem);
@@ -51,13 +38,6 @@ input[type="date"] {
   width: 26ch;
 }
 
-button {
-  border: 0;
-  border-radius: 0.2rem;
-  padding: 0.4rem;
-  width: max-content;
-  color: var(--main-color);
-}
 #loader {
   background-color: var(--accent-color);
 }

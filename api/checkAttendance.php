@@ -4,7 +4,7 @@ if (!isset($_SESSION['user_name']) || ($_SESSION['user_role'] != 'teacher')) {
   die('ERROR 403: Unauthorized Access');
 }
 
-require_once 'databaseManager.php';
+require_once '../src/databaseManager.php';
 $conn = establishConnectionToDB();
 if ($conn->connect_error) {
   die('Connection to database failed!');
@@ -24,8 +24,8 @@ $row = $result->fetch_assoc();
 $checkStmt->close();
 
 if ($row['count'] > 0) {
-  echo true;
+  echo 1;
 } else {
-  echo false;
+  echo 0;
 }
 ?>

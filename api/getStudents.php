@@ -4,7 +4,7 @@ if (!isset($_SESSION['user_name']) || ($_SESSION['user_role'] != 'teacher')) {
   die('ERROR 403: Unauthorized Access');
 }
 
-require_once 'databaseManager.php';
+require_once '../src/databaseManager.php';
 $conn = establishConnectionToDB();
 if ($conn->connect_error) {
   die('Connection to database failed!');

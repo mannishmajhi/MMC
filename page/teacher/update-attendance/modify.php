@@ -37,8 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        echo "<h1>Attendance updated successfully for</h1>";
-        echo "<h2>program = $program, semester = $semester, section = $section and date = $today</h2>";
+        header('Location: ../../status.html');
         $conn->close();
         exit();
     }
@@ -69,11 +68,11 @@ if (empty($_SESSION['csrf_token'])) {
   </head>
   <body>
     <header>
-      <span id="logo">
+      <span id="branding">
         <img src="../../../res/img/TU-Logo.svg.png" alt="TU Logo" />
         <h2>Mechi Multiple Campus</h2>
       </span>
-      <button id="logout" onclick="logout()">Log out</button>
+      <button id="logout" onclick="window.location.href = window.location.origin + '/src/logout.php';">Log out</button>
     </header>
     <main>
       <section>

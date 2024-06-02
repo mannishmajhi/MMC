@@ -158,6 +158,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       </table>
     </main>
   </body>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      window.print();
+    });
+  </script>
 </html>
 EOT;
 
@@ -183,18 +188,14 @@ if (empty($_SESSION['csrf_token'])) {
     <link rel="stylesheet" href="../../../res/css/attendance.css" />
     <link rel="icon" type="image/x-icon" href="../../../res/img/favicon.png" />
     <script src="../../../res/js/select.js"></script>
-    <script src="../../../res/js/update-attendance.js"></script>
-    <script>
-      const classes = <?php echo json_encode($selectOptions); ?>;
-  </script>
   </head>
   <body>
     <header>
-      <span id="logo">
+      <span id="branding">
         <img src="../../../res/img/TU-Logo.svg.png" alt="TU Logo" />
         <h2>Mechi Multiple Campus</h2>
       </span>
-      <button id="logout" onclick="logout()">Log out</button>
+      <button id="logout" onclick="window.location.href = window.location.origin + '/src/logout.php';">Log out</button>
     </header>
     <main>
     <form action="" method="POST">
@@ -264,6 +265,7 @@ if (empty($_SESSION['csrf_token'])) {
     </form>
   </body>
   <script>
+    const classes = <?php echo json_encode($selectOptions); ?>;
     document.addEventListener("DOMContentLoaded", function() {        
       const today = new Date();        
       const year = today.getFullYear();

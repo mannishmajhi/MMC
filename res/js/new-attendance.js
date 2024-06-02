@@ -1,47 +1,40 @@
-const URLmatches = window.location.href.match(/^(https?:\/\/[^/]+)/i);
-const baseURL = URLmatches ? URLmatches[0] : "localhost" + window.location.port;
-
 function checkIfAlreadyDone() {
-  var program = document.getElementById("program").value;
-  var semester = document.getElementById("semester").value;
-  var section = document.getElementById("section").value;
-  var subjectCode = document.getElementById("subject").value;
-
   let xhr = new XMLHttpRequest();
 
   xhr.open(
     "GET",
-    baseURL +
-      "/src/checkAttendance.php" +
+    window.location.origin +
+      "/api/checkAttendance.php" +
       "?program=" +
-      program +
+      document.getElementById("program").value +
       "&semester=" +
-      semester +
+      document.getElementById("semester").value +
       "&section=" +
-      section +
+      document.getElementById("section").value +
       "&subject_code=" +
-      subjectCode,
+      document.getElementById("subject").value,
     true
   );
   xhr.send();
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
-      if (xhr.responseText) {
+      console.log(xhr.responseText);
+      if (xhr.responseText > 0) {
         tryRedirect();
       } else {
-        generateTable();
+        loadStudents();
       }
     }
   };
 }
 
 function tryRedirect() {
-  if (window.confirm("Attendance already exists! Are you trying to update?")) {
+  if (window.confirm("Attendance already exists! Do you want to update?")) {
     window.location.href =
-      baseURL + "/page/teacher/update-attendance/modify.php";
+      window.location.origin + "/page/teacher/update-attendance/modify.php";
   } else {
-    window.location.href = baseURL + "/page/teacher.php";
+    window.location.href = window.location.origin + "/page/teacher.php";
   }
 }
 
@@ -52,7 +45,7 @@ function loadStudents() {
 
   var xhr = new XMLHttpRequest();
 
-  xhr.open("POST", baseURL + "/src/getStudents.php", true);
+  xhr.open("POST", window.location.origin + "/api/getStudents.php", true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   var params =
     "program=" +
@@ -67,8 +60,10 @@ function loadStudents() {
     if (xhr.readyState == 4 && xhr.status == 200) {
       document.getElementsByTagName("section")[0].style.display = "none";
       document.getElementsByTagName("main")[0].style.paddingTop = "2rem";
+
       generateTable(xhr.responseText);
       generateHiddenForm();
+
       document.getElementById("form").style.display = "block";
     }
   };
@@ -110,6 +105,11 @@ function generateTable(studentRecord) {
 }
 
 function generateHiddenForm() {
+  var program = document.getElementById("program").value;
+  var semester = document.getElementById("semester").value;
+  var section = document.getElementById("section").value;
+  var subjectCode = document.getElementById("subject").value;
+
   const form = document.getElementById("form");
   const hiddenDiv = document.createElement("div");
   hiddenDiv.style.display = "none";
